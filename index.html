@@ -218,18 +218,27 @@
   /* ---------- configurator ---------- */
   #config{position:fixed;top:0;right:0;bottom:0;width:400px;max-width:100vw;z-index:30;background:rgba(8,13,24,.96);border-left:1px solid var(--line);backdrop-filter:blur(18px);transform:translateX(102%);transition:transform .5s cubic-bezier(.22,1,.3,1);display:flex;flex-direction:column;box-shadow:-30px 0 80px rgba(0,0,0,.5)}
   #config.open{transform:translateX(0)}
-  .cf-sec{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--accent);padding:15px 24px 6px;display:flex;align-items:center;gap:10px}
+  .cf-sec{font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.22em;color:var(--accent);padding:16px 24px 8px;display:flex;align-items:center;gap:8px}
   .cf-sec::after{content:"";flex:1;height:1px;background:rgba(96,150,255,.15)}
-  .cf-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 24px;cursor:pointer;transition:background .2s}
-  .cf-row:hover{background:rgba(28,71,142,.18)}
-  .cf-l{font-size:12px;color:#cbd7f2}
-  .cf-sw{width:34px;height:18px;border-radius:10px;border:1px solid var(--line);background:rgba(139,154,194,.15);position:relative;transition:all .25s;flex-shrink:0}
-  .cf-sw::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#8b9ac2;transition:all .25s}
-  .cf-t.on .cf-sw{background:var(--em-blue);border-color:var(--accent)}
+  .cf-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 24px;min-height:44px;
+    width:100%;text-align:left;font:inherit;color:inherit;background:transparent;border:0;
+    transition:background-color 180ms ease-out}
+  button.cf-row{cursor:pointer}
+  button.cf-row:hover{background:var(--in-row-hover)}
+  button.cf-row:active{background:var(--in-row-active)}
+  button.cf-row:focus-visible{outline:3px solid var(--focus-ring);outline-offset:-3px}
+  @media(prefers-reduced-motion:reduce){.cf-row,.cf-sw,.cf-sw::after,.cf-seg button{transition:none}}
+  .cf-l{font-size:14px;line-height:1.4;color:var(--em-cream)}
+  /* The switch track is the state indicator, so its edge carries 1.4.11's 3:1. */
+  .cf-sw{width:34px;height:18px;border-radius:10px;border:1px solid var(--in-border);background:rgba(139,154,194,.22);position:relative;transition:background-color .25s,border-color .25s;flex-shrink:0}
+  .cf-sw::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#B9C6E4;transition:left .25s,background-color .25s}
+  .cf-t.on .cf-sw{background:var(--em-blue);border-color:var(--in-border-accent)}
   .cf-t.on .cf-sw::after{left:18px;background:#fff}
   .cf-t.on .cf-l{color:#fff}
   .cf-seg{display:flex;border:1px solid var(--line);border-radius:5px;overflow:hidden;flex-shrink:0}
-  .cf-seg button{background:transparent;border:0;color:var(--muted);cursor:pointer;font-family:var(--mono);font-size:10px;letter-spacing:.08em;padding:6px 9px;transition:all .2s}
+  .cf-seg{border-color:var(--in-border)}
+  .cf-seg button{background:transparent;border:0;color:var(--in-desc);cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:11px 12px;min-height:44px;transition:background-color 180ms ease-out,color 180ms ease-out}
+  .cf-seg button:focus-visible{outline:3px solid var(--focus-ring);outline-offset:-3px}
   .cf-seg button.active{background:var(--em-blue);color:#fff}
   .cf-load{padding:10px 24px 4px}
   #loadSlider{width:100%;accent-color:var(--accent);cursor:pointer}
@@ -311,20 +320,20 @@
     .mx-head h2{font-size:21.85px}
     .mx-head .sub{font-size:11.5px}
     .mx-close{width:36.8px;height:36.8px;font-size:17.25px}
-    .mx-row{padding:12.65px 23px 12.65px 29.9px;gap:13.8px}
+    .mx-row{padding:13.8px 23px 13.8px 27.6px;gap:13.8px}
     .mx-row .n{font-size:11.5px;width:23px}
-    .mx-row .t{font-size:13.8px}
-    .mx-row .note{font-size:11.5px}
+    .mx-row .t{font-size:16.1px}
+    .mx-row .note{font-size:13.8px}
     .mx-row .s{font-size:11.5px;padding:4.6px 9.2px}
     .mx-row .go{font-size:14.95px}
-    .mx-sec{font-size:11.5px;padding:18.4px 29.9px 8.05px}
+    .mx-sec{font-size:12.65px;padding:18.4px 27.6px 9.2px}
     .mx-foot{font-size:11.5px;padding:16.1px 29.9px}
     #config{width:460px}
-    .cf-sec{font-size:11.5px;padding:17.25px 27.6px 6.9px}
-    .cf-row{padding:10.35px 27.6px;gap:11.5px}
-    .cf-l{font-size:13.8px}
+    .cf-sec{font-size:12.65px;padding:18.4px 27.6px 9.2px}
+    .cf-row{padding:13.8px 27.6px;gap:9.2px;min-height:50.6px}
+    .cf-l{font-size:16.1px}
     .cf-sw{width:39.1px;height:20.7px}
-    .cf-seg button{font-size:11.5px;padding:6.9px 10.35px}
+    .cf-seg button{font-size:12.65px;padding:12.65px 13.8px;min-height:50.6px}
     .cf-note{font-size:11.5px;padding:2.3px 27.6px 9.2px}
     .cf-load{padding:11.5px 27.6px 4.6px}
     .cf-load-txt{font-size:11.5px}
@@ -402,20 +411,20 @@
     .mx-head h2{font-size:26.6px}
     .mx-head .sub{font-size:14px}
     .mx-close{width:44.8px;height:44.8px;font-size:21px}
-    .mx-row{padding:15.4px 28px 15.4px 36.4px;gap:16.8px}
+    .mx-row{padding:16.8px 28px 16.8px 33.6px;gap:16.8px}
     .mx-row .n{font-size:14px;width:28px}
-    .mx-row .t{font-size:16.8px}
-    .mx-row .note{font-size:14px}
+    .mx-row .t{font-size:19.6px}
+    .mx-row .note{font-size:16.8px}
     .mx-row .s{font-size:14px;padding:5.6px 11.2px}
     .mx-row .go{font-size:18.2px}
-    .mx-sec{font-size:14px;padding:22.4px 36.4px 9.8px}
+    .mx-sec{font-size:15.4px;padding:22.4px 33.6px 11.2px}
     .mx-foot{font-size:14px;padding:19.6px 36.4px}
     #config{width:560px}
-    .cf-sec{font-size:14px;padding:21px 33.6px 8.4px}
-    .cf-row{padding:12.6px 33.6px;gap:14px}
-    .cf-l{font-size:16.8px}
+    .cf-sec{font-size:15.4px;padding:22.4px 33.6px 11.2px}
+    .cf-row{padding:16.8px 33.6px;gap:11.2px;min-height:61.6px}
+    .cf-l{font-size:19.6px}
     .cf-sw{width:47.6px;height:25.2px}
-    .cf-seg button{font-size:14px;padding:8.4px 12.6px}
+    .cf-seg button{font-size:15.4px;padding:15.4px 16.8px;min-height:61.6px}
     .cf-note{font-size:14px;padding:2.8px 33.6px 11.2px}
     .cf-load{padding:14px 33.6px 5.6px}
     .cf-load-txt{font-size:14px}
@@ -493,20 +502,20 @@
     .mx-head h2{font-size:34.2px}
     .mx-head .sub{font-size:18px}
     .mx-close{width:57.6px;height:57.6px;font-size:27px}
-    .mx-row{padding:19.8px 36px 19.8px 46.8px;gap:21.6px}
+    .mx-row{padding:21.6px 36px 21.6px 43.2px;gap:21.6px}
     .mx-row .n{font-size:18px;width:36px}
-    .mx-row .t{font-size:21.6px}
-    .mx-row .note{font-size:18px}
+    .mx-row .t{font-size:25.2px}
+    .mx-row .note{font-size:21.6px}
     .mx-row .s{font-size:18px;padding:7.2px 14.4px}
     .mx-row .go{font-size:23.4px}
-    .mx-sec{font-size:18px;padding:28.8px 46.8px 12.6px}
+    .mx-sec{font-size:19.8px;padding:28.8px 43.2px 14.4px}
     .mx-foot{font-size:18px;padding:25.2px 46.8px}
     #config{width:720px}
-    .cf-sec{font-size:18px;padding:27px 43.2px 10.8px}
-    .cf-row{padding:16.2px 43.2px;gap:18px}
-    .cf-l{font-size:21.6px}
+    .cf-sec{font-size:19.8px;padding:28.8px 43.2px 14.4px}
+    .cf-row{padding:21.6px 43.2px;gap:14.4px;min-height:79.2px}
+    .cf-l{font-size:25.2px}
     .cf-sw{width:61.2px;height:32.4px}
-    .cf-seg button{font-size:18px;padding:10.8px 16.2px}
+    .cf-seg button{font-size:19.8px;padding:19.8px 21.6px;min-height:79.2px}
     .cf-note{font-size:18px;padding:3.6px 43.2px 14.4px}
     .cf-load{padding:18px 43.2px 7.2px}
     .cf-load-txt{font-size:18px}
@@ -684,37 +693,37 @@
     <div class="sub">LIVE BUILD VIEW · PANELS SHOWN TRANSLUCENT · CHANGES FLASH AMBER</div>
   </div>
   <div class="mx-body" id="cfBody">
-    <div class="cf-sec">MOUNTING</div>
+    <h3 class="cf-sec">MOUNTING</h3>
     <div class="cf-row"><span class="cf-l">Front rail hole type</span>
       <span class="cf-seg" data-k="railHole">
         <button data-v="thread" class="active">10-32</button><button data-v="square">CAGE NUT</button>
       </span></div>
-    <div class="cf-row cf-t" data-k="rear"><span class="cf-l">Rear mounting rails</span><span class="cf-sw"></span></div>
-    <div class="cf-sec">COOLING APPROACH</div>
+    <button type="button" class="cf-row cf-t" data-k="rear"><span class="cf-l">Rear mounting rails</span><span class="cf-sw"></span></button>
+    <h3 class="cf-sec">COOLING APPROACH</h3>
     <div class="cf-row"><span class="cf-l">Cooling</span>
       <span class="cf-seg" data-k="cooling">
         <button data-v="inline" class="active">IN-LINE (AIR)</button><button data-v="rdhx">REAR-DOOR HX</button>
       </span></div>
     <div class="cf-note">The campus lab floors accommodate both in-line and back-of-rack cooling &mdash; this cabinet supports either without modification.</div>
-    <div class="cf-sec">DOORS &amp; PANELS</div>
-    <div class="cf-row cf-t on" data-k="doorF"><span class="cf-l">Front door — fully vented</span><span class="cf-sw"></span></div>
-    <div class="cf-row cf-t on" data-k="doorR"><span class="cf-l">Rear door — solid (RDHx-ready)</span><span class="cf-sw"></span></div>
+    <h3 class="cf-sec">DOORS &amp; PANELS</h3>
+    <button type="button" class="cf-row cf-t on" data-k="doorF"><span class="cf-l">Front door — fully vented</span><span class="cf-sw"></span></button>
+    <button type="button" class="cf-row cf-t on" data-k="doorR"><span class="cf-l">Rear door — solid (RDHx-ready)</span><span class="cf-sw"></span></button>
     <div class="cf-row"><span class="cf-l">Side panels</span>
       <span class="cf-seg" data-k="sideP">
         <button data-v="none">NONE</button><button data-v="solid" class="active">SOLID</button><button data-v="vented">VENTED</button>
       </span></div>
-    <div class="cf-sec">CABLE &amp; POWER</div>
-    <div class="cf-row cf-t" data-k="mgrF"><span class="cf-l">Front/side cable management</span><span class="cf-sw"></span></div>
-    <div class="cf-row cf-t" data-k="mgrR"><span class="cf-l">Rear/side cable management</span><span class="cf-sw"></span></div>
-    <div class="cf-row cf-t" data-k="mgrH"><span class="cf-l">Horizontal cable management</span><span class="cf-sw"></span></div>
-    <div class="cf-row cf-t" data-k="pdu"><span class="cf-l">Rear PDU mounting hardware</span><span class="cf-sw"></span></div>
-    <div class="cf-sec">ACCESSORIES</div>
-    <div class="cf-row cf-t" data-k="shelf"><span class="cf-l">Cabinet shelf</span><span class="cf-sw"></span></div>
-    <div class="cf-row cf-t" data-k="blank"><span class="cf-l">Filler / blanking plates</span><span class="cf-sw"></span></div>
-    <div class="cf-row cf-t" data-k="ground"><span class="cf-l">Grounding plate</span><span class="cf-sw"></span></div>
-    <div class="cf-sec">ROW</div>
-    <div class="cf-row cf-t" data-k="gang"><span class="cf-l">Gang two cabinets (HW included)</span><span class="cf-sw"></span></div>
-    <div class="cf-sec">LOAD TEST — 3,000 LBS STATIC RATING</div>
+    <h3 class="cf-sec">CABLE &amp; POWER</h3>
+    <button type="button" class="cf-row cf-t" data-k="mgrF"><span class="cf-l">Front/side cable management</span><span class="cf-sw"></span></button>
+    <button type="button" class="cf-row cf-t" data-k="mgrR"><span class="cf-l">Rear/side cable management</span><span class="cf-sw"></span></button>
+    <button type="button" class="cf-row cf-t" data-k="mgrH"><span class="cf-l">Horizontal cable management</span><span class="cf-sw"></span></button>
+    <button type="button" class="cf-row cf-t" data-k="pdu"><span class="cf-l">Rear PDU mounting hardware</span><span class="cf-sw"></span></button>
+    <h3 class="cf-sec">ACCESSORIES</h3>
+    <button type="button" class="cf-row cf-t" data-k="shelf"><span class="cf-l">Cabinet shelf</span><span class="cf-sw"></span></button>
+    <button type="button" class="cf-row cf-t" data-k="blank"><span class="cf-l">Filler / blanking plates</span><span class="cf-sw"></span></button>
+    <button type="button" class="cf-row cf-t" data-k="ground"><span class="cf-l">Grounding plate</span><span class="cf-sw"></span></button>
+    <h3 class="cf-sec">ROW</h3>
+    <button type="button" class="cf-row cf-t" data-k="gang"><span class="cf-l">Gang two cabinets (HW included)</span><span class="cf-sw"></span></button>
+    <h3 class="cf-sec">LOAD TEST — 3,000 LBS STATIC RATING</h3>
     <div class="cf-load">
       <input type="range" id="loadSlider" min="0" max="22" value="0" aria-label="Equipment load: number of 2U units installed">
       <div class="cf-meter"><div class="cf-meter-fill" id="loadFill"></div></div>
@@ -1184,9 +1193,6 @@ chapters.forEach((ch,i)=>{
   b.onclick=()=>{engage();go(i);}; dotsEl.appendChild(b);
 });
 let mxN=0;
-/* Still used by the configurator rows (#cfBody .cf-t), which are divs.
-   The matrix rows no longer need it - they are native buttons. */
-function keyable(el){el.setAttribute('role','button');el.setAttribute('tabindex','0');el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});}
 const mxNav=document.createElement('nav');
 mxNav.setAttribute('aria-label','Nokia requirement list');
 MXS.forEach(sec=>{
@@ -1400,7 +1406,16 @@ document.getElementById('cfBody').addEventListener('click',e=>{
     if(k==='gang')flyTo({pos:cfg.gang?[5.8,3.2,8.0]:[5.0,3.0,6.8],tgt:[cfg.gang?.56:.2,1.9,0]});
   }
 });
-document.querySelectorAll('#cfBody .cf-t').forEach(keyable);
+/* Each segmented control is a labelled group of toggle buttons. aria-pressed is
+   kept rather than role="radio": a radiogroup owes the user arrow-key roving
+   focus, and a half-built one reads worse than plain toggle buttons. */
+document.querySelectorAll('#cfBody .cf-seg').forEach((seg,i)=>{
+  seg.setAttribute('role','group');
+  const lbl=seg.closest('.cf-row')?.querySelector('.cf-l');
+  if(lbl){ if(!lbl.id)lbl.id='cfSegLbl'+i; seg.setAttribute('aria-labelledby',lbl.id); }
+});
+/* Section headings label the group of controls that follows them. */
+document.querySelectorAll('#cfBody .cf-sec').forEach((s,i)=>{ if(!s.id)s.id='cfSec'+i; });
 function syncCfgAria(){
   document.querySelectorAll('#cfBody .cf-t').forEach(r=>{r.setAttribute('role','switch');r.setAttribute('aria-checked',cfg[r.dataset.k]?'true':'false');});
   document.querySelectorAll('#cfBody .cf-seg button').forEach(b=>{const k=b.parentElement.dataset.k;b.setAttribute('aria-pressed',cfg[k]===b.dataset.v?'true':'false');});
