@@ -730,7 +730,7 @@
     <div class="sub">25 REQUIREMENT LINES · 8 CATEGORIES · TAP ANY LINE TO SEE IT IN 3D</div>
   </div>
   <div class="mx-body" id="mxBody"></div>
-  <div class="mx-foot"><b>FULL COVERAGE</b> — ALL 25 LINES OF THE NOKIA LIST ADDRESSED ABOVE.<br><a href="#" id="mxDwgLink" style="color:#9ecbff;text-decoration:underline">REF. EM DRAWING 4925-001 — VIEW</a> · ELECTRON METAL · ELECTRONMETAL.CA</div>
+  <div class="mx-foot"><b>FULL COVERAGE</b> — ALL 25 LINES OF THE NOKIA LIST ADDRESSED ABOVE.<br><a href="Electron-Metal-4925-001-Spec-Sheet.pdf" id="mxDwgLink" target="_blank" rel="noopener" style="color:#9ecbff;text-decoration:underline">REF. EM DRAWING 4925-001 — VIEW PDF</a> · ELECTRON METAL · ELECTRONMETAL.CA</div>
 </div>
 
 <!-- three.js r128 (MIT) inlined so this file runs with no network access:
@@ -1555,7 +1555,6 @@ function openDwg(i){engage();hidePop();dwgEl.classList.add('open');dwSet(i||0);}
 function closeDwg(){dwgEl.classList.remove('open');}
 document.getElementById('dwgBtn').onclick=()=>{dwgEl.classList.contains('open')?closeDwg():openDwg(0);};
 document.getElementById('dwgClose').onclick=closeDwg;
-document.getElementById('mxDwgLink').onclick=e=>{e.preventDefault();openDwg(0);};
 document.querySelectorAll('.dw-tab').forEach(t=>t.onclick=()=>dwSet(parseInt(t.dataset.i,10)));
 dwStage.addEventListener('pointerdown',e=>{dwDrag=true;dwLX=e.clientX;dwLY=e.clientY;dwStage.classList.add('drag');});
 addEventListener('pointermove',e=>{if(!dwDrag)return;dwX+=e.clientX-dwLX;dwY+=e.clientY-dwLY;dwLX=e.clientX;dwLY=e.clientY;dwRender();});
