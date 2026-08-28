@@ -103,19 +103,26 @@
   .mx-body{flex:1;overflow-y:auto;padding:8px 0}
   .mx-body::-webkit-scrollbar{width:5px}
   .mx-body::-webkit-scrollbar-thumb{background:rgba(96,150,255,.3);border-radius:3px}
-  .mx-row{display:flex;align-items:center;gap:12px;padding:11px 20px 11px 26px;cursor:pointer;border-bottom:1px solid rgba(96,150,255,.08);transition:background .2s}
-  .mx-row:hover{background:rgba(28,71,142,.22)}
+  .mx-list{list-style:none}
+  .mx-row{display:flex;align-items:center;gap:12px;padding:12px 20px 12px 24px;cursor:pointer;width:100%;
+    text-align:left;font:inherit;color:inherit;background:transparent;border:0;
+    border-bottom:1px solid var(--in-border);
+    transition:background-color 180ms ease-out,border-color 180ms ease-out}
+  .mx-row:hover{background:var(--in-row-hover)}
+  .mx-row:active{background:var(--in-row-active)}
+  .mx-row:focus-visible{outline:3px solid var(--focus-ring);outline-offset:-3px}
+  @media(prefers-reduced-motion:reduce){.mx-row{transition:none}}
   .mx-row .n{font-family:var(--mono);font-size:10px;color:var(--muted);width:20px;flex-shrink:0}
-  .mx-row .t{flex:1;font-size:12px;line-height:1.45;color:#cbd7f2}
+  .mx-row .t{flex:1;font-size:14px;line-height:1.5;color:var(--em-cream)}
   .mx-row .s{flex-shrink:0;font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding:4px 8px;border-radius:3px;border:1px solid}
   .s.std{color:#9ecbff;border-color:rgba(77,163,255,.45);background:rgba(28,71,142,.25)}
   .s.opt{color:#ffd89a;border-color:rgba(245,166,35,.45);background:rgba(245,166,35,.08)}
   .s.cap{color:#7ee8bb;border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.08)}
   .mx-row .go{flex-shrink:0;color:var(--accent);font-size:13px;opacity:.6}
-  .mx-sec{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--accent);padding:16px 26px 7px;border-bottom:1px solid rgba(96,150,255,.12);display:flex;align-items:center;gap:10px}
+  .mx-sec{font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.22em;color:var(--accent);padding:16px 24px 8px;border-bottom:1px solid rgba(96,150,255,.12);display:flex;align-items:center;gap:8px}
   .mx-sec::after{content:"";flex:1;height:1px;background:rgba(96,150,255,.15)}
   .mx-row .tw{flex:1;min-width:0}
-  .mx-row .note{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted);margin-top:4px;line-height:1.5}
+  .mx-row .note{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--in-desc);margin-top:4px;line-height:1.5}
   .mx-row:hover .go{opacity:1}
   .mx-foot{padding:14px 26px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--muted);line-height:1.8}
   .mx-foot b{color:#c5d6ff;font-weight:500}
@@ -1147,7 +1154,6 @@ function updateCam(dt){
 /* interaction + autoplay */
 let dragging=false,lastX=0,lastY=0,userEngaged=false,autoT=0,started=false,lastAct=Date.now(),toastOn=false,demoA=false,demoB=false,configOpenedOnce=false;
 const REDUCE=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-function keyable(el){el.setAttribute('role','button');el.setAttribute('tabindex','0');el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});}
 const AUTO=12;
 function engage(){userEngaged=true;document.getElementById('autobar').style.opacity=0;lastAct=Date.now();hideToast();}
 stageEl.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;tween=null;engage();stageEl.classList.add('dragging');});
@@ -1178,20 +1184,38 @@ chapters.forEach((ch,i)=>{
   b.onclick=()=>{engage();go(i);}; dotsEl.appendChild(b);
 });
 let mxN=0;
+/* Still used by the configurator rows (#cfBody .cf-t), which are divs.
+   The matrix rows no longer need it - they are native buttons. */
+function keyable(el){el.setAttribute('role','button');el.setAttribute('tabindex','0');el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});}
+const mxNav=document.createElement('nav');
+mxNav.setAttribute('aria-label','Nokia requirement list');
 MXS.forEach(sec=>{
-  const h=document.createElement('div'); h.className='mx-sec'; h.textContent=sec.sec; mxBody.appendChild(h);
+  /* Section titles are real headings so a screen reader can jump between the
+     eight categories, and each group is a list so its length is announced. */
+  const h=document.createElement('h3'); h.className='mx-sec'; h.textContent=sec.sec; mxNav.appendChild(h);
+  const ul=document.createElement('ul'); ul.className='mx-list';
   sec.rows.forEach(r=>{
     mxN++;
-    const d=document.createElement('div');
+    const li=document.createElement('li');
+    const d=document.createElement('button');
+    d.type='button';
     d.className='mx-row';
-    d.innerHTML='<span class="n">'+String(mxN).padStart(2,'0')+'</span><span class="tw"><span class="t">'+r[0]+'</span>'+(r[4]?'<div class="note">'+r[4]+'</div>':'')+'</span><span class="s '+r[2]+'">'+r[1]+'</span><span class="go">&#8594;</span>';
+    /* The ordinal and the arrow are decorative: the requirement text and the
+       status chip carry the meaning, so keep them out of the accessible name. */
+    d.innerHTML='<span class="n" aria-hidden="true">'+String(mxN).padStart(2,'0')+'</span><span class="tw"><span class="t">'+r[0]+'</span>'+(r[4]?'<span class="note">'+r[4]+'</span>':'')+'</span><span class="s '+r[2]+'">'+r[1]+'</span><span class="go" aria-hidden="true">&#8594;</span>';
     d.onclick=()=>{engage();closeMatrix();go(r[3]);};
-    keyable(d);
-    mxBody.appendChild(d);
+    li.appendChild(d); ul.appendChild(li);
   });
+  mxNav.appendChild(ul);
 });
-function openMatrix(){matrixEl.classList.add('open');}
-function closeMatrix(){matrixEl.classList.remove('open');}
+mxBody.appendChild(mxNav);
+/* The side panels are moved off-screen with translateX when closed, so they stay
+   focusable: a keyboard user tabbed through the whole closed configurator before
+   reaching the matrix. Keep `inert` in sync with the open state. */
+function setPanelOpen(el,open){el.classList.toggle('open',open);open?el.removeAttribute('inert'):el.setAttribute('inert','');}
+function syncPanels(){setPanelOpen(matrixEl,matrixEl.classList.contains('open'));setPanelOpen(configEl,configEl.classList.contains('open'));}
+function openMatrix(){setPanelOpen(matrixEl,true);}
+function closeMatrix(){setPanelOpen(matrixEl,false);}
 document.getElementById('matrixBtn').onclick=()=>{engage();closeConfig();matrixEl.classList.contains('open')?closeMatrix():openMatrix();};
 document.getElementById('mxClose').onclick=closeMatrix;
 
@@ -1339,14 +1363,14 @@ function renderSummary(){
 function openConfig(){
   engage(); closeMatrix(); hidePop();
   configOpenedOnce=true; document.getElementById('configBtn').classList.remove('pulse');
-  configOn=true; configEl.classList.add('open');
+  configOn=true; setPanelOpen(configEl,true);
   applyConfig();
   flyTo({pos:cfg.gang?[5.8,3.2,8.0]:[5.0,3.0,6.8],tgt:[cfg.gang?.56:.2,1.9,0]});
   legendEl.classList.remove('on');
 }
 function closeConfig(){
   if(!configOn)return;
-  configOn=false; configEl.classList.remove('open');
+  configOn=false; setPanelOpen(configEl,false);
   setLoad(loadN);
   if(cur>=0){applyChapter(chapters[cur]);}
 }
@@ -1571,11 +1595,12 @@ let dismissIntro=function(){introEl.classList.add('out');setTimeout(()=>introEl.
 /* The intro is a modal layer, but it sits last in the DOM, so a keyboard user
    used to tab through 15 controls hidden behind it before reaching this screen.
    Mark everything else inert while it is up, and release on dismiss. */
+syncPanels();   /* closed panels start inert */
 const introSiblings=[...document.body.children].filter(el=>el!==introEl&&el.tagName!=='SCRIPT');
 function trapIntro(on){introSiblings.forEach(el=>on?el.setAttribute('inert',''):el.removeAttribute('inert'));}
 trapIntro(true);
 const _dismiss=dismissIntro;
-dismissIntro=function(){trapIntro(false);_dismiss();};
+dismissIntro=function(){trapIntro(false);syncPanels();_dismiss();};
 const bindRow=(id,fn)=>document.getElementById(id).addEventListener('click',e=>{e.preventDefault();fn();});
 bindRow('inPlay',()=>{started=true;autoT=0;dismissIntro();});
 bindRow('inExplore',()=>{started=true;engage();dismissIntro();});
