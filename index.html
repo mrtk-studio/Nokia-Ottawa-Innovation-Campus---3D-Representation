@@ -17,6 +17,13 @@
     --stage:#070c16; --panel:rgba(10,17,30,.85); --line:rgba(96,150,255,.22);
     --text:#F5F4F0; --muted:#8b9ac2;
     --mono:'IBM Plex Mono',ui-monospace,monospace; --sans:'Archivo',system-ui,sans-serif;
+    /* entry-screen tokens — derived from the brand ramp above, each verified
+       against the composited card fill #0B1422 (see commit message for ratios) */
+    --in-border:#1E5DC5;         /* 3.01:1 vs card — WCAG 1.4.11 */
+    --in-border-accent:#2677FD;  /* 4.52:1 vs card */
+    --in-row-hover:var(--em-blue); --in-row-active:var(--em-navy); --in-row-accent-hover:#17499C;
+    --in-desc:#B9C6E4;           /* 10.78:1 on card — descriptions carry the time estimates */
+    --focus-ring:#8FC4FF;        /* 10.12:1 on card, 5.34:1 on hover, 4.92:1 on active */
   }
   *{margin:0;padding:0;box-sizing:border-box}
   button:focus-visible,[tabindex="0"]:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
@@ -128,32 +135,72 @@
   #dwImg{max-width:96%;max-height:96%;box-shadow:0 30px 90px rgba(0,0,0,.7);border:1px solid rgba(96,150,255,.2);transform-origin:center center;user-select:none}
   .dw-hint{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--muted);text-align:center;padding:11px;border-top:1px solid var(--line)}
   /* ---------- intro / nogl / toast / hints ---------- */
-  #intro,#nogl{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,rgba(28,71,142,.28),rgba(7,12,22,.94) 65%);backdrop-filter:blur(8px);transition:opacity .6s;padding:20px}
+  #intro,#nogl{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;overflow-y:auto;background:radial-gradient(ellipse at 50% 40%,rgba(28,71,142,.28),rgba(7,12,22,.94) 65%);backdrop-filter:blur(8px);transition:opacity .6s;padding:20px}
+  #intro .in-card,#nogl .in-card{margin:auto}
   #nogl{display:none;z-index:60;background:var(--stage)}
   #intro.out{opacity:0;pointer-events:none}
-  .in-card{max-width:520px;width:100%;text-align:center;padding:44px 40px;background:rgba(10,17,30,.75);border:1px solid var(--line);border-radius:12px;box-shadow:0 40px 100px rgba(0,0,0,.6),inset 0 1px 0 rgba(140,180,255,.1)}
-  .in-brand{font-weight:800;letter-spacing:.16em;font-size:16px;color:var(--em-cream);margin-bottom:14px}
+  .in-card{max-width:520px;width:100%;text-align:center;padding:40px;background:rgba(10,17,30,.75);border:1px solid var(--line);border-radius:12px;box-shadow:0 40px 100px rgba(0,0,0,.6),inset 0 1px 0 rgba(140,180,255,.1)}
+  .in-brand{font-weight:800;letter-spacing:.16em;font-size:16px;color:var(--em-cream);margin-bottom:16px}
   .in-brand b{color:var(--accent)}
-  .in-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.26em;color:var(--accent);margin-bottom:16px}
+  .in-kicker{font-family:var(--mono);font-size:14px;letter-spacing:.12em;color:var(--accent);margin-bottom:16px;line-height:1.5}
   .in-card h1{font-size:28px;font-weight:800;letter-spacing:-.01em;line-height:1.15;margin-bottom:8px}
-  .in-card h1 span{color:var(--muted);font-weight:600;font-size:20px}
+  .in-card h1 span{color:var(--muted);font-weight:600;font-size:15px}
   .in-p{font-size:13px;line-height:1.7;color:var(--muted);margin:14px 0 6px}
-  .in-steps{display:flex;flex-direction:column;gap:9px;margin:24px auto 26px;max-width:330px;text-align:left}
-  .in-steps div{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:#cbd7f2}
-  .in-steps i{font-style:normal;width:22px;height:22px;border-radius:50%;border:1px solid var(--em-gray);color:var(--em-cream);background:rgba(127,129,132,.18);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+  .in-nav{margin:24px auto;max-width:360px;text-align:left}
+  .in-nav ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .in-row{display:flex;align-items:center;gap:12px;padding:12px;border-radius:8px;text-decoration:none;
+    border:1px solid var(--in-border);background:transparent;cursor:pointer;
+    transition:background-color 180ms ease-out,border-color 180ms ease-out}
+  .in-row:hover{background:var(--in-row-hover);border-color:var(--in-border-accent)}
+  .in-row:active{background:var(--in-row-active)}
+  .in-row.is-accent{border-color:var(--in-border-accent)}
+  .in-row.is-accent:hover{background:var(--in-row-accent-hover)}
+  .in-row.is-quiet{border-style:dashed;background:transparent}
+  .in-row:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+  .in-badge{font-style:normal;width:24px;height:24px;border-radius:50%;border:1px solid var(--in-border);
+    color:var(--em-cream);background:rgba(30,93,197,.18);display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:12px;flex-shrink:0}
+  .in-rt{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}
+  .in-rtitle{font-size:16px;font-weight:500;line-height:1.4;color:var(--em-cream)}
+  .in-rdesc{font-size:14px;line-height:1.5;color:var(--in-desc)}
+  .in-go{flex-shrink:0;color:var(--in-border-accent)}
+  .in-dl{display:inline-flex;align-items:center;gap:8px;color:var(--accent);text-decoration:none;
+    font-family:var(--mono);font-size:12px;letter-spacing:.06em;padding:12px 8px;min-height:44px;border-radius:4px;
+    transition:background-color 180ms ease-out,color 180ms ease-out}
+  .in-dl:hover{background:var(--in-row-hover);color:var(--em-cream)}
+  .in-dl:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+  @media(prefers-reduced-motion:reduce){.in-row,.in-dl{transition:none}}
+  /* Short viewports: the 16/14px type scale makes the card 832px, which overflows
+     a 1366x768 laptop once browser chrome is subtracted. Trim the decorative
+     spacing rather than the type, and never shrink a touch target below 44px. */
+  @media(max-height:900px){
+    #intro .in-card{padding:24px 32px}
+    #intro .in-stats{display:none}
+    #intro .in-brand{margin-bottom:8px}
+    #intro .in-card h1{font-size:24px}
+    .in-nav{margin:16px auto}
+    .in-row{padding:8px 12px}
+    .in-foot{margin-top:8px}
+  }
+  @media(max-height:700px){
+    #intro .in-card{padding:16px 24px}
+    #intro .in-kicker{margin-bottom:8px}
+    #intro .in-card h1{font-size:20px}
+    .in-nav ul{gap:4px}
+  }
   .in-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
   .in-primary,.in-secondary{font-family:var(--mono);font-size:11px;letter-spacing:.14em;padding:13px 24px;border-radius:6px;cursor:pointer;transition:all .25s;text-decoration:none;display:inline-block}
   .in-primary{background:var(--em-blue);border:1px solid var(--accent);color:#fff}
   .in-primary:hover{background:#1d5ab8;box-shadow:0 0 24px rgba(77,163,255,.35)}
   .in-secondary{background:transparent;border:1px solid var(--line);color:var(--muted)}
   .in-secondary:hover{color:#fff;border-color:var(--accent)}
-  .in-stats{display:flex;justify-content:center;gap:26px;margin-top:18px}
-  .in-stats div{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+  .in-stats{display:flex;justify-content:center;gap:24px;margin-top:16px}
+  .in-stats div{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--muted);display:flex;flex-direction:column;gap:4px}
   .in-stats b{font-size:17px;font-weight:600;color:var(--em-cream);letter-spacing:.02em}
   .cf-reset{position:absolute;top:22px;right:62px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;padding:7px 12px;border-radius:4px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;transition:all .25s}
   .cf-reset:hover{color:#fff;border-color:var(--accent)}
   .cf-note{font-family:var(--mono);font-size:10px;letter-spacing:.05em;line-height:1.7;color:var(--accent);padding:2px 24px 8px;opacity:.85}
-  .in-foot{margin-top:22px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--muted)}
+  .in-foot{margin-top:24px;display:flex;flex-direction:column;align-items:center;gap:4px}
   #toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%) translateY(8px);z-index:22;font-family:var(--mono);font-size:10px;letter-spacing:.16em;padding:11px 20px;border-radius:100px;border:1px solid rgba(77,163,255,.5);background:rgba(28,71,142,.85);color:#fff;cursor:pointer;backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .4s,transform .4s;box-shadow:0 12px 34px rgba(0,0,0,.45)}
   #toast.on{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
   .card .try{display:none;margin-top:12px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--accent)}
@@ -279,21 +326,26 @@
     #cfSum{font-size:11.5px}
     #cfCopy{font-size:11.5px;padding:11.5px}
     .cf-reset{font-size:11.5px;padding:8.05px 13.8px;right:71.3px}
-    .in-card{max-width:598px;padding:50.6px 46px}
+    .in-card{max-width:598px;padding:46px}
     .in-brand{font-size:18.4px}
-    .in-kicker{font-size:11.5px}
+    .in-kicker{font-size:16.1px}
     .in-card h1{font-size:32.2px}
-    .in-card h1 span{font-size:23px}
+    .in-card h1 span{font-size:17.25px}
     .in-p{font-size:14.95px}
-    .in-steps{max-width:379.5px;gap:10.35px}
-    .in-steps div{font-size:12.08px;gap:13.8px}
-    .in-steps i{width:25.3px;height:25.3px;font-size:11.5px}
+    .in-nav{max-width:414px}
+    .in-nav ul{gap:9.2px}
+    .in-row{padding:13.8px;gap:13.8px;border-radius:9.2px}
+    .in-badge{width:27.6px;height:27.6px;font-size:13.8px}
+    .in-rtitle{font-size:18.4px}
+    .in-rdesc{font-size:16.1px}
+    .in-rt{gap:4.6px}
+    .in-dl{font-size:13.8px;gap:9.2px;padding:13.8px 9.2px;min-height:50.6px}
     .in-primary,.in-secondary{font-size:12.65px;padding:14.95px 27.6px}
     .in-btns{gap:13.8px}
-    .in-stats{gap:29.9px}
+    .in-stats{gap:27.6px}
     .in-stats div{font-size:11.5px}
     .in-stats b{font-size:19.55px}
-    .in-foot{font-size:11.5px}
+    .in-foot{gap:4.6px;margin-top:27.6px}
     #hotpop{width:322px;padding:14.95px 17.25px}
     .hp-k{font-size:11.5px}
     .hp-n{font-size:16.1px}
@@ -365,21 +417,26 @@
     #cfSum{font-size:14px}
     #cfCopy{font-size:14px;padding:14px}
     .cf-reset{font-size:14px;padding:9.8px 16.8px;right:86.8px}
-    .in-card{max-width:728px;padding:61.6px 56px}
+    .in-card{max-width:728px;padding:56px}
     .in-brand{font-size:22.4px}
-    .in-kicker{font-size:14px}
+    .in-kicker{font-size:19.6px}
     .in-card h1{font-size:39.2px}
-    .in-card h1 span{font-size:28px}
+    .in-card h1 span{font-size:21px}
     .in-p{font-size:18.2px}
-    .in-steps{max-width:462px;gap:12.6px}
-    .in-steps div{font-size:14.7px;gap:16.8px}
-    .in-steps i{width:30.8px;height:30.8px;font-size:14px}
+    .in-nav{max-width:504px}
+    .in-nav ul{gap:11.2px}
+    .in-row{padding:16.8px;gap:16.8px;border-radius:11.2px}
+    .in-badge{width:33.6px;height:33.6px;font-size:16.8px}
+    .in-rtitle{font-size:22.4px}
+    .in-rdesc{font-size:19.6px}
+    .in-rt{gap:5.6px}
+    .in-dl{font-size:16.8px;gap:11.2px;padding:16.8px 11.2px;min-height:61.6px}
     .in-primary,.in-secondary{font-size:15.4px;padding:18.2px 33.6px}
     .in-btns{gap:16.8px}
-    .in-stats{gap:36.4px}
+    .in-stats{gap:33.6px}
     .in-stats div{font-size:14px}
     .in-stats b{font-size:23.8px}
-    .in-foot{font-size:14px}
+    .in-foot{gap:5.6px;margin-top:33.6px}
     #hotpop{width:392px;padding:18.2px 21px}
     .hp-k{font-size:14px}
     .hp-n{font-size:19.6px}
@@ -451,21 +508,26 @@
     #cfSum{font-size:18px}
     #cfCopy{font-size:18px;padding:18px}
     .cf-reset{font-size:18px;padding:12.6px 21.6px;right:111.6px}
-    .in-card{max-width:936px;padding:79.2px 72px}
+    .in-card{max-width:936px;padding:72px}
     .in-brand{font-size:28.8px}
-    .in-kicker{font-size:18px}
+    .in-kicker{font-size:25.2px}
     .in-card h1{font-size:50.4px}
-    .in-card h1 span{font-size:36px}
+    .in-card h1 span{font-size:27px}
     .in-p{font-size:23.4px}
-    .in-steps{max-width:594px;gap:16.2px}
-    .in-steps div{font-size:18.9px;gap:21.6px}
-    .in-steps i{width:39.6px;height:39.6px;font-size:18px}
+    .in-nav{max-width:648px}
+    .in-nav ul{gap:14.4px}
+    .in-row{padding:21.6px;gap:21.6px;border-radius:14.4px}
+    .in-badge{width:43.2px;height:43.2px;font-size:21.6px}
+    .in-rtitle{font-size:28.8px}
+    .in-rdesc{font-size:25.2px}
+    .in-rt{gap:7.2px}
+    .in-dl{font-size:21.6px;gap:14.4px;padding:21.6px 14.4px;min-height:79.2px}
     .in-primary,.in-secondary{font-size:19.8px;padding:23.4px 43.2px}
     .in-btns{gap:21.6px}
-    .in-stats{gap:46.8px}
+    .in-stats{gap:43.2px}
     .in-stats div{font-size:18px}
     .in-stats b{font-size:30.6px}
-    .in-foot{font-size:18px}
+    .in-foot{gap:7.2px;margin-top:43.2px}
     #hotpop{width:504px;padding:23.4px 27px}
     .hp-k{font-size:18px}
     .hp-n{font-size:25.2px}
@@ -560,17 +622,40 @@
       <div><b>2,800+</b>FOUR-POST RACKS</div>
       <div><b>4</b>LAB FLOORS</div>
     </div>
-    <div class="in-steps">
-      <div><i>1</i>WATCH THE 90-SECOND TOUR</div>
-      <div><i>2</i>CHECK THE COVERAGE MATRIX</div>
-      <div><i>3</i>BUILD &amp; COPY YOUR CONFIGURATION</div>
+    <nav class="in-nav" aria-label="Review sections">
+      <ul>
+        <li><a class="in-row is-accent" id="inPlay" href="#stage">
+          <i class="in-badge" aria-hidden="true">1</i>
+          <span class="in-rt"><span class="in-rtitle">Watch the 90-second tour</span><span class="in-rdesc">About 90 seconds &middot; 8 chapters, auto-advancing</span></span>
+          <svg class="in-go" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a></li>
+        <li><a class="in-row" id="inMatrix" href="#matrix">
+          <i class="in-badge" aria-hidden="true">2</i>
+          <span class="in-rt"><span class="in-rtitle">Check the coverage matrix</span><span class="in-rdesc">All 25 Nokia requirement lines &middot; about 2 minutes</span></span>
+          <svg class="in-go" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a></li>
+        <li><a class="in-row" id="inConfig" href="#config">
+          <i class="in-badge" aria-hidden="true">3</i>
+          <span class="in-rt"><span class="in-rtitle">Build &amp; copy your configuration</span><span class="in-rdesc">Live 3D build &middot; copy a spec summary when you are done</span></span>
+          <svg class="in-go" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a></li>
+        <li><a class="in-row is-quiet" id="inExplore" href="#stage">
+          
+          <span class="in-rt"><span class="in-rtitle">Explore freely</span><span class="in-rdesc">Drag to orbit, scroll to zoom, click any component for specs</span></span>
+          <svg class="in-go" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a></li>
+      </ul>
+    </nav>
+    <div class="in-foot">
+      <a class="in-dl" href="Electron-Metal-x-Nokia-Presentation.pdf" download>
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="9" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 14h5M8 11.5V14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Download the full presentation (PDF, 0.9 MB)
+      </a>
+      <a class="in-dl" href="#">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M9 1.5H4.5a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V5l-3.5-3.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9 1.5V5h3.5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+        Download the spec sheet (PDF, 1.2 MB)
+      </a>
     </div>
-    <div class="in-btns">
-      <button class="in-primary" id="inPlay">&#9654;&nbsp;&nbsp;PLAY THE TOUR</button>
-      <button class="in-secondary" id="inMatrix">CHECK COVERAGE</button>
-      <button class="in-secondary" id="inExplore">EXPLORE FREELY</button>
-    </div>
-    <div class="in-foot">EVERYTHING IS CLICKABLE &nbsp;·&nbsp; DRAG TO ORBIT &nbsp;·&nbsp; SCROLL TO ZOOM</div>
   </div>
 </div>
 
@@ -1483,10 +1568,21 @@ document.getElementById('toast').onclick=resumeTour;
 function replayTour(){hideToast();closeConfig();closeMatrix();hidePop();userEngaged=false;started=true;autoT=0;autobar.style.opacity=1;cur=-1;go(0);}
 document.getElementById('replayBtn').onclick=replayTour;
 const introEl=document.getElementById('intro');
-function dismissIntro(){introEl.classList.add('out');setTimeout(()=>introEl.style.display='none',700);}
-document.getElementById('inPlay').onclick=()=>{started=true;autoT=0;dismissIntro();};
-document.getElementById('inExplore').onclick=()=>{started=true;engage();dismissIntro();};
-document.getElementById('inMatrix').onclick=()=>{started=true;engage();dismissIntro();openMatrix();};
+let dismissIntro=function(){introEl.classList.add('out');setTimeout(()=>introEl.style.display='none',700);};
+/* The intro is a modal layer, but it sits last in the DOM, so a keyboard user
+   used to tab through 15 controls hidden behind it before reaching this screen.
+   Mark everything else inert while it is up, and release on dismiss. */
+const introSiblings=[...document.body.children].filter(el=>el!==introEl&&el.tagName!=='SCRIPT');
+function trapIntro(on){introSiblings.forEach(el=>on?el.setAttribute('inert',''):el.removeAttribute('inert'));}
+trapIntro(true);
+const _dismiss=dismissIntro;
+dismissIntro=function(){trapIntro(false);_dismiss();};
+const bindRow=(id,fn)=>document.getElementById(id).addEventListener('click',e=>{e.preventDefault();fn();});
+bindRow('inPlay',()=>{started=true;autoT=0;dismissIntro();});
+bindRow('inExplore',()=>{started=true;engage();dismissIntro();});
+bindRow('inMatrix',()=>{started=true;engage();dismissIntro();openMatrix();});
+bindRow('inConfig',()=>{started=true;engage();dismissIntro();openConfig();});
+document.getElementById('inPlay').focus({preventScroll:true});
 go(0);
 animate();
 </script>
